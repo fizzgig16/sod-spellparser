@@ -1,0 +1,2 @@
+module MapSpellToCharClassesHelper
+end

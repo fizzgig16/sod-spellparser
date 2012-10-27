@@ -1,0 +1,90 @@
+<h1>Search Spells</h1>
+
+<table>
+
+<%= form_tag({}, :method => "get") do %>
+	<div class="field">
+		Partial Spell Name: &nbsp;<%= text_field_tag(:spell_name) %>
+	</div>
+	<br/>
+	<div class="field">
+		Resist type: &nbsp;<br>
+		<%= check_box_tag(:cold_resist) %>
+		<%= label_tag(:cold_resist, "Cold") %>		
+		<%= check_box_tag(:fire_resist) %>
+		<%= label_tag(:fire_resist, "Fire") %>		
+		<%= check_box_tag(:magic_resist) %>
+		<%= label_tag(:magic_resist, "Magic") %>		
+		<%= check_box_tag(:poison_resist) %>
+		<%= label_tag(:poison_resist, "Poison") %>		
+		<%= check_box_tag(:disease_resist) %>
+		<%= label_tag(:disease_resist, "Disease") %>		
+	</div>
+	<br/>
+	<div class="field">
+		Classes: &nbsp;<br>
+		<%= check_box_tag(:war) %>
+		<%= label_tag(:war, "WAR") %>		
+		<%= check_box_tag(:clr) %>
+		<%= label_tag(:clr, "CLR") %>		
+		<%= check_box_tag(:pal) %>
+		<%= label_tag(:pal, "PAL") %>		
+		<%= check_box_tag(:rng) %>
+		<%= label_tag(:rng, "RNG") %>		
+		<%= check_box_tag(:shd) %>
+		<%= label_tag(:shd, "SHD") %>		
+		<%= check_box_tag(:dru) %>
+		<%= label_tag(:dru, "DRU") %>		
+		<%= check_box_tag(:mnk) %>
+		<%= label_tag(:mnk, "MNK") %>		
+		<%= check_box_tag(:brd) %>
+		<%= label_tag(:brd, "BRD") %>		
+		<%= check_box_tag(:rog) %>
+		<%= label_tag(:rog, "ROG") %>		
+		<%= check_box_tag(:shm) %>
+		<%= label_tag(:shm, "SHM") %>		
+		<%= check_box_tag(:nec) %>
+		<%= label_tag(:nec, "NEC") %>		
+		<%= check_box_tag(:wiz) %>
+		<%= label_tag(:wiz, "WIZ") %>		
+		<%= check_box_tag(:mag) %>
+		<%= label_tag(:mag, "MAG") %>		
+		<%= check_box_tag(:enc) %>
+		<%= label_tag(:enc, "ENC") %>		
+		<%= check_box_tag(:bst) %>
+		<%= label_tag(:bst, "BST") %>		
+	</div>
+	<br/>
+	<div class="field">
+		Spell Type: <br/>
+		<%= radio_button_tag(:beneficial, "1", true) %>
+		<%= label_tag(:beneficial, "Both") %>		
+		<%= radio_button_tag(:beneficial, "2", false) %>
+		<%= label_tag(:beneficial, "Beneficial") %>		
+		<%= radio_button_tag(:beneficial, "3", false) %>
+		<%= label_tag(:beneficial, "Detrimental") %>		
+	</div>
+	<div class="field">
+		Min Mana: &nbsp;<%= text_field_tag(:minmana) %>
+	</div>
+	<br/>
+	<div class="field">
+		Max Mana: &nbsp;<%= text_field_tag(:maxmana) %>
+	</div>
+	
+	<br/>
+	<div>
+		Requires Reagent: &nbsp;<%= check_box_tag(:requiresreagent)%>
+	</div>
+
+	<div class="actions">
+		<%= submit_tag("Search") %>
+	</div>
+	
+	<%= hidden_field_tag(:s, "t") %>
+<% end %>
+
+</table>
+
+<br />
+

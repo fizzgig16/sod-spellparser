@@ -1,0 +1,68 @@
+<h1>Spell Details</h1>
+<br/>
+
+<% @spells.each do | spell | %>
+<table border="1" width="500">
+	<tr>
+		<td colspan="3"><h2><%= spell.name %></h2></td>
+	</tr>
+	<tr>
+		<td><b>Mana Cost: </b><%= spell.mana_cost %></td>
+		<td><b>Target Type: </b><%= spell["target_name"] %></td>
+		<td><b>Skill: </b><%= spell["skill_name"] %></td>
+	</tr>
+	<tr>
+		<td><b>Cast Time: </b><%= "%.1f" % (spell.cast_time / 1000) %> seconds</td>
+		<td><b>Recast Time: </b><%= "%.1f" % (spell.recast_time / 1000) %></td>
+		<td><b>Resist Adj: </b><%= spell.resist_adj %></td>
+	</tr>
+	<tr>
+		<td><b>Resist Type: </b><%= spell["resist_name"] %></td>
+		<td><b>Range: </b><%= spell.range %></td>
+		<td><b>AE Range: </b><%= spell.ae_range %></td>
+	</tr>
+	<tr>
+		<td><b>Duration: </b>
+			<% if (spell.duration > 0) %>
+				<%= spell.duration %> ticks (<%= spell.duration.to_i * 6 %> seconds)
+			<% else %>
+				Instant
+			<% end %>
+		</td>
+		<td><b>AE Duration: </b><%= spell.ae_duration %></td>
+		<td><b>Push: </b><%= spell.push %></td>
+	</tr>
+	<tr>
+		<td colspan="3"><b>Reagents: </b>
+			<%
+				reagents = ""
+				if (spell["reagent1_name"] != nil and spell["reagent1_name"] != "") 
+					reagents = spell["reagent1_name"] 
+					reagents += " (" + spell.reagent1qty.to_s + ")" 
+				end
+				if (spell["reagent2_name"] != nil and spell["reagent2_name"] != "") 
+					reagents += ", " + spell["reagent2_name"] + " (" + spell.reagent2qty.to_s + ")"
+				end
+			%>
+			<%= reagents == "" ? "None" : reagents %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3"><b>Classes: </b><%= spell["classes"] %></td>
+	</tr>
+	<tr>
+		<td colspan="3"><b>Effects:</b><br/>
+			<% @arrEffects.each do | effect | %>
+				<% next if effect == "" %>
+				<%= effect %><br/>
+			<% end %>	
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3"><b>Cast on You: </b><%= spell["castonyou"] %></td>
+	</tr>
+	<tr>
+		<td colspan="3"><b>Cast on Other: </b>Target<%= spell["castonother"] %></td>
+	</tr>
+</table>
+<% end %>

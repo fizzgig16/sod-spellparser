@@ -1,0 +1,2 @@
+module CharClassesHelper
+end

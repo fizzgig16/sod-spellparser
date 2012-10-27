@@ -1,0 +1,33 @@
+<% if @spells.length == 0 %>
+	<h1>Your search produced no results. Please try different search parameters</h1>
+<% elsif @spells.length == 1
+	#redirect_to foo_search_spells_path(:spell_id => @spells.first.id)
+	#redirect_to :controller => 'search_spells', :action => 'foo', :spell_id => @spells.first.id
+%>
+<% else %>
+	<h1>Your search returned the following results (<%= @spells.length %> found):</h1>
+	<br/>
+
+	<table border="1">
+		<tr>
+			<td><u>Spell Name</u></td>
+			<td><u>Mana Cost</u></td>
+			<td><u>Target Type</u></td>
+			<td><u>Skill Used</u></td>
+			<td><u>Classes</u></td>
+			<td><u>Reagent 1</u></td>
+			<td><u>Reagent 2</u></td>
+		</tr>
+		<% @spells.each do |spell| %>
+			<tr>
+				<td><%= link_to spell.name, foo_search_spells_path(:spell_id => spell.id) %></td>
+				<td><%= spell.mana_cost %></td>
+				<td><%= spell["target_name"] %></td>
+				<td><%= spell["skill_name"] %></td>
+				<td><%= spell["classes"] %></td>
+				<td><%= spell["reagent1_name"] %></td>
+				<td><%= spell["reagent2_name"] %></td>
+			</tr>
+		<% end %>
+	</table>
+<% end %>
