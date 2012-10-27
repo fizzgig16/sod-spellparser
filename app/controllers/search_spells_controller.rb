@@ -17,8 +17,10 @@ class SearchSpellsController < ApplicationController
         #pp effects
         effects.each do |e|
             strEffect = ParseSpellsTxt.GetSpellEffect(e.effect, e.base1, e.base2, e.max, e.formula, 1, duration)
-            strEffect = strEffect
-            arrEffects << strEffect
+            if (strEffect != "")
+				strEffect = "Slot " + e.slot.to_s + ": " + strEffect
+            	arrEffects << strEffect
+			end
         end
 
 		return arrEffects

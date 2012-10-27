@@ -1,30 +1,37 @@
+<% require 'duration' %>
 <h1>Spell Details</h1>
 <br/>
 
 <% @spells.each do | spell | %>
-<table border="1" width="500">
+<table border="1" width="650">
 	<tr>
 		<td colspan="3"><h2><%= spell.name %></h2></td>
 	</tr>
 	<tr>
 		<td><b>Mana Cost: </b><%= spell.mana_cost %></td>
+		<td><b>Type: </b><%= (spell.beneficial == true) ? "Beneficial" : "Detrimental" %></td>
 		<td><b>Target Type: </b><%= spell["target_name"] %></td>
-		<td><b>Skill: </b><%= spell["skill_name"] %></td>
 	</tr>
 	<tr>
 		<td><b>Cast Time: </b><%= "%.1f" % (spell.cast_time / 1000) %> seconds</td>
 		<td><b>Recast Time: </b><%= "%.1f" % (spell.recast_time / 1000) %></td>
-		<td><b>Resist Adj: </b><%= spell.resist_adj %></td>
+		<td><b>Skill: </b><%= spell["skill_name"] %></td>
 	</tr>
 	<tr>
-		<td><b>Resist Type: </b><%= spell["resist_name"] %></td>
+		<td><b>Resist Type: </b><%= (spell["resist_name"] == nil) ? "None" : spell["resist_name"] %></td>
+		<td><b>Resist Adj: </b><%= spell.resist_adj %></td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
 		<td><b>Range: </b><%= spell.range %></td>
 		<td><b>AE Range: </b><%= spell.ae_range %></td>
+		<td>&nbsp;</td>
 	</tr>
 	<tr>
 		<td><b>Duration: </b>
 			<% if (spell.duration > 0) %>
-				<%= spell.duration %> ticks (<%= spell.duration.to_i * 6 %> seconds)
+				<% duration = Duration.new(spell.duration.to_i * 6) %>
+				<%= spell.duration %> ticks (<%= duration.to_s %>)
 			<% else %>
 				Instant
 			<% end %>

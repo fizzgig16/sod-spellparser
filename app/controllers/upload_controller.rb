@@ -1,4 +1,4 @@
-require 'ftools'
+#require 'ftools'
 require 'spellparse'
 require 'sqlite3'
 require 'pp'
