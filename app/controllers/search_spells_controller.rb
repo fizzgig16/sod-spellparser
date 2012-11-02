@@ -15,12 +15,12 @@ class SearchSpellsController < ApplicationController
 	
 	end
 	
-	def GetSpellEffects(spell_id, duration)
+	def GetSpellEffects(spell_id, duration, extra)
 		arrEffects = Array.new
         effects = Effect.select("*").where("spell_id=" + spell_id.to_s).order("slot")
         #pp effects
         effects.each do |e|
-            strEffect = ParseSpellsTxt.GetSpellEffect(e.effect, e.base1, e.base2, e.max, e.formula, 1, duration)
+            strEffect = ParseSpellsTxt.GetSpellEffect(e.effect, e.base1, e.base2, e.max, e.formula, 1, duration, extra)
             if (strEffect != "")
 				strEffect = "Slot " + e.slot.to_s + ": " + strEffect
             	arrEffects << strEffect
@@ -54,7 +54,7 @@ class SearchSpellsController < ApplicationController
 			spell["classes"] = @class.first["classes"]
 
 			# Also pull in effects and calculate results
-			@arrEffects = GetSpellEffects(spell.id, spell.duration)
+			@arrEffects = GetSpellEffects(spell.id, spell.duration, spell.extra)
 		end
 		
 		render :spelldetail
@@ -65,6 +65,8 @@ class SearchSpellsController < ApplicationController
 			name = params[:spell_name]
 			manamin = params[:minmana]
 			manamax = params[:maxmana]
+			levelmin = params[:levelmin]
+			levelmax = params[:levelmax]
 
 			arrConditions = Array.new
 			arrConditionsClass = Array.new
@@ -78,6 +80,8 @@ class SearchSpellsController < ApplicationController
 			arrConditions << "(reagent1_id > 0 OR reagent2_id > 0)" if params[:requiresreagent]
 			arrConditions << "beneficial = 't'" if params[:beneficial] == "2"
 			arrConditions << "beneficial = 'f'" if params[:beneficial] == "3"
+			arrConditions << "char_classes.level >= " + levelmin.to_s if levelmin
+			arrConditions << "char_classes.level <= " + levelmax.to_s if levelmax
 	
 			arrConditionsResist << "resist_type_id = 1" if params[:magic_resist]
 			arrConditionsResist << "resist_type_id = 2" if params[:fire_resist]
@@ -133,7 +137,7 @@ class SearchSpellsController < ApplicationController
             	#spell["classes"] = @class.first["classes"]
 
             	# Also pull in effects and calculate results
-            	@arrEffects = GetSpellEffects(@spell_id, @spells.first.duration)
+            	@arrEffects = GetSpellEffects(@spell_id, @spells.first.duration, @spells.first.extra)
 
 				render :spelldetail
 			else

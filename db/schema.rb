@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121027043307) do
+ActiveRecord::Schema.define(:version => 20121102175108) do
 
   create_table "char_classes", :force => true do |t|
     t.string   "name"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(:version => 20121027043307) do
     t.integer  "push"
     t.integer  "skill_id"
     t.boolean  "beneficial"
+    t.string   "extra"
   end
 
   create_table "target_types", :force => true do |t|

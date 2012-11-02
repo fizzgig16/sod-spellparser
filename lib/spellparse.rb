@@ -36,6 +36,7 @@ class ParseSpellsTxt
 		# Format is as follows (separated by ^ - number represents the array index)
 		# 0: id
 		# 1: name
+		# 3: "extra" - can contain things like teleport destinations
 		# 4: message when you cast
 		# 5: message when someone else casts
 		# 6: message when cast on you
@@ -88,6 +89,7 @@ class ParseSpellsTxt
 
 		hashSpell["id"] = arrParts[0]
 		hashSpell["name"] = arrParts[1]
+		hashSpell["extra"] = arrParts[3]
 		hashSpell["youcast"] = arrParts[4]
 		hashSpell["othercasts"] = arrParts[5]
 		hashSpell["onyou"] = arrParts[6]
@@ -170,7 +172,7 @@ class ParseSpellsTxt
 		return hashSpell
 	end
 
-	def self.GetSpellEffect(effect, base1, base2, max, formula, level, duration)
+	def self.GetSpellEffect(effect, base1, base2, max, formula, level, duration, myextra)
 		effectamt = "0"
 
 		return "" if ((effect == 254) or (effect == 10 && (base1 < 1 or base1 > 255)))
@@ -178,7 +180,7 @@ class ParseSpellsTxt
 		value = CalculateEffectValue(formula, base1, max, duration, level)
 		range = CalculateEffectRangeValue(formula, base1, max, duration, level)
 		maxlevel = max > 0 ? (" up to level " + max.to_s) : ""
-		extra = " FIXME: EXTRA"
+		extra = " " + myextra
 		repeating = duration > 0 ? " per tick" : ""
 
 		case effect

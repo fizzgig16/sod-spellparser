@@ -26,6 +26,7 @@ class UploadController < ApplicationController
 			recSpell = Spell.new
 			recSpell.id = spell["id"].to_i
 			recSpell.name = spell["name"]
+			recSpell.extra = spell["extra"]
 			recSpell.youcast = spell["youcast"]
         	recSpell.othercasts = spell["othercasts"]
         	recSpell.castonyou = spell["onyou"]
