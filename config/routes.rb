@@ -23,7 +23,7 @@ Spellparser::Application.routes.draw do
 
   resources :search_spells do
 	collection do
-		get 'foo'
+		get 'detail'
 	end
   end
  

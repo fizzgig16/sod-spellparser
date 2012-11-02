@@ -69,7 +69,7 @@
 		<td colspan="3"><b>Cast on You: </b><%= spell["castonyou"] %></td>
 	</tr>
 	<tr>
-		<td colspan="3"><b>Cast on Other: </b>Target<%= spell["castonother"] %></td>
+		<td colspan="3"><b>Cast on Other: </b><% if spell["castonother"] != "" %>Target <%= spell["castonother"] %><% end %></td>
 	</tr>
 </table>
 <% end %>

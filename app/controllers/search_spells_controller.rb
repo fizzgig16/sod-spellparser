@@ -1,13 +1,17 @@
 require 'pp'
 require 'spellparse'
 
-NORMAL_SELECT = "spells.*, r1.name AS reagent1_name, r2.name AS reagent2_name, skill.name AS skill_name, target.name AS target_name, resist.name AS resist_name"
+NORMAL_SELECT = "DISTINCT spells.*, r1.name AS reagent1_name, r2.name AS reagent2_name, skill.name AS skill_name, target.name AS target_name, resist.name AS resist_name"
 NORMAL_JOIN = "LEFT JOIN 'reagents' AS 'r1' ON r1.id = spells.reagent1_id LEFT JOIN 'reagents' as 'r2' ON r2.id = spells.reagent2_id INNER JOIN 'skill_types' as skill ON skill.id = spells.skill_id "
 NORMAL_JOIN += "INNER JOIN 'target_types' AS target ON target.id = spells.target_type_id LEFT JOIN 'resist_types' AS resist ON resist.id = spells.resist_type_id "
 
 class SearchSpellsController < ApplicationController
 	
 	def create
+	
+	end
+
+	def show
 	
 	end
 	
@@ -30,7 +34,7 @@ class SearchSpellsController < ApplicationController
 		return MapSpellToCharClass.find_by_sql("SELECT group_concat(char_classes.name || '(' || m.level || ')', ', ') AS classes FROM char_classes INNER JOIN map_spell_to_char_classes as m ON m.class_id = char_classes.id WHERE m.spell_id = " + spell_id.to_s + " ORDER BY level, char_classes.name")
 	end
 
-	def foo
+	def detail
 		# Called to render spell detail view
 		#pp "Spell ID: " + params[:spell_id].to_s
 		if (params[:spell_id] != nil and params[:spell_id] != "")
@@ -53,7 +57,7 @@ class SearchSpellsController < ApplicationController
 			@arrEffects = GetSpellEffects(spell.id, spell.duration)
 		end
 		
-	render :spelldetail
+		render :spelldetail
 	end
 
 	def index
