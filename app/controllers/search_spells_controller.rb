@@ -80,8 +80,8 @@ class SearchSpellsController < ApplicationController
 			arrConditions << "(reagent1_id > 0 OR reagent2_id > 0)" if params[:requiresreagent]
 			arrConditions << "beneficial = 't'" if params[:beneficial] == "2"
 			arrConditions << "beneficial = 'f'" if params[:beneficial] == "3"
-			arrConditions << "char_classes.level >= " + levelmin.to_s if levelmin
-			arrConditions << "char_classes.level <= " + levelmax.to_s if levelmax
+			arrConditions << "char_classes.level >= " + levelmin.to_s if levelmin != ""
+			arrConditions << "char_classes.level <= " + levelmax.to_s if levelmax != ""
 	
 			arrConditionsResist << "resist_type_id = 1" if params[:magic_resist]
 			arrConditionsResist << "resist_type_id = 2" if params[:fire_resist]
