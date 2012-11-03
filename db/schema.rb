@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,19 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121102175108) do
+ActiveRecord::Schema.define(:version => 20121103170838) do
 
   create_table "char_classes", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.string   "long_name"
   end
 
   create_table "effect_types", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "effects", :force => true do |t|
@@ -33,45 +34,47 @@ ActiveRecord::Schema.define(:version => 20121102175108) do
     t.integer  "base1"
     t.integer  "base2"
     t.integer  "max"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "map_spell_to_char_classes", :force => true do |t|
     t.integer  "spell_id"
     t.integer  "class_id"
     t.integer  "level"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "reagents", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "resist_types", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "skill_types", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "spells", :force => true do |t|
     t.string   "name"
     t.integer  "type_id"
     t.integer  "range"
+    t.integer  "ae_range"
+    t.integer  "push"
     t.integer  "target_type_id"
     t.integer  "usable_by_id"
     t.integer  "mana_cost"
-    t.decimal  "cast_time"
-    t.decimal  "recast_time"
+    t.decimal  "cast_time",      :precision => 10, :scale => 0
+    t.decimal  "recast_time",    :precision => 10, :scale => 0
     t.integer  "duration"
     t.integer  "ae_duration"
     t.integer  "reagent1_id"
@@ -79,8 +82,8 @@ ActiveRecord::Schema.define(:version => 20121102175108) do
     t.integer  "zone_type_id"
     t.integer  "resist_type_id"
     t.integer  "resist_adj"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                    :null => false
+    t.datetime "updated_at",                                    :null => false
     t.string   "youcast"
     t.string   "othercasts"
     t.string   "castonyou"
@@ -88,8 +91,6 @@ ActiveRecord::Schema.define(:version => 20121102175108) do
     t.integer  "reagent1qty"
     t.integer  "reagent2qty"
     t.integer  "spell_type_id"
-    t.integer  "ae_range"
-    t.integer  "push"
     t.integer  "skill_id"
     t.boolean  "beneficial"
     t.string   "extra"
@@ -97,14 +98,14 @@ ActiveRecord::Schema.define(:version => 20121102175108) do
 
   create_table "target_types", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "zone_types", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
 end
