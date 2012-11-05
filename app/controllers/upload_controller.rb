@@ -15,6 +15,10 @@ class UploadController < ApplicationController
 		MapSpellToCharClass.delete_all
 		Effect.delete_all
 
+		records_spells = []
+		records_classes = []
+		records_effects = []
+
 		parser = ParseSpellsTxt.new
 		arrSpells = parser.ParseFile("spells_us.txt")
 		arrSpells.each do |spell|
@@ -51,7 +55,7 @@ class UploadController < ApplicationController
 			recSpell.beneficial = spell["beneficial"]
 			recSpell.recourse_id = spell["recourseid"]
 
-			recSpell.save
+			records_spells << recSpell
 
 			# Class mapping
 			#pp spell
@@ -64,7 +68,7 @@ class UploadController < ApplicationController
 				recCharMap.spell_id = spell["id"].to_i
 				recCharMap.class_id = i + 1
 				recCharMap.level = level
-				recCharMap.save
+				records_classes << recCharMap
 			end
 
 			# Now go through effects (done by slot)
@@ -87,12 +91,16 @@ class UploadController < ApplicationController
 					recEffect.base2 = base2
 					recEffect.max = max
 
-					recEffect.save
+					records_effects << recEffect
 				end
 				#puts "Slot effect: " + effectid.to_s
 			end
 
 		end
+		
+		Spell.import records_spells
+		MapSpellToCharClass.import records_classes
+		Effect.import records_effects
 
 		FileUtils.rm file	
 	end
