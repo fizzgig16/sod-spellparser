@@ -96,8 +96,8 @@ class SearchSpellsController < ApplicationController
 			arrConditions << "mana_cost >= " + manamin.to_s if manamin != ""
 			arrConditions << "mana_cost <= " + manamax.to_s if manamax != ""
 			arrConditions << "(reagent1_id > 0 OR reagent2_id > 0)" if params[:requiresreagent]
-			arrConditions << "beneficial = 't'" if params[:beneficial] == "2"
-			arrConditions << "beneficial = 'f'" if params[:beneficial] == "3"
+			arrConditions << "spells.beneficial = 't'" if params[:beneficial] == "2"
+			arrConditions << "spells.beneficial = 'f'" if params[:beneficial] == "3"
 			arrConditions << "char_classes.level >= " + levelmin.to_s if levelmin != ""
 			arrConditions << "char_classes.level <= " + levelmax.to_s if levelmax != ""
 	
