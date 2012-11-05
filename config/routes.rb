@@ -26,7 +26,9 @@ Spellparser::Application.routes.draw do
 		get 'detail'
 	end
   end
- 
+
+  root :to => 'search_spells#index'
+
   #match 'search_spells/spelldetail' => 'search_spells#spelldetail', :as => 'spelldetail'
   #match 'search_spells/foo' => 'search_spells#foo', :as => 'foo'
  

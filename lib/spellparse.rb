@@ -402,7 +402,11 @@ class ParseSpellsTxt
             when 121
                 return GetEffectDescriptor("Reverse Damage Shield", -value)
             when 123
-                return "Screech"
+                # Forced spell stacking. base1 is the effect that drives the stacking
+				# Example: aegolism has effect 123 in slot 1, with base1=69, which is Total HP
+				# This means that aego will NOT stack with spells that have an effect modifying Total HP in slot 1
+				# Clear as mud?
+				return "Forced Spell Stacking: will not stack with other spells affecting " + extra_spell_name + " in this slot"
 			when 153
 				# Autocast
 				effect_name = use_html ? ("<a href='search_spells/detail?spell_id=" + base1.to_s + "'>" + extra_spell_name + "</a>") : extra_spell_name
@@ -429,7 +433,7 @@ class ParseSpellsTxt
 		effectamt = 0
 		case formula
             when 100
-                effectamt = min.to_s
+                effectamt = base1.to_s
             when 101
                 effectamt = level / 2
             when 102

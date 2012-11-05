@@ -22,9 +22,17 @@ class SearchSpellsController < ApplicationController
         effects = Effect.select("*").where("spell_id=" + spell_id.to_s).order("slot")
         #pp effects
         effects.each do |e|
-			# Try to get a spell name in the case of formulas with a value 100, as well as effect ID 153. This happens for procs
 			extra_spell = ""
-			if (e.formula == 100 || e.effect == 153)
+			
+			if (e.effect == 123)
+				# Forced spell stacking, set extra_spell as the effect that won't stack
+				stack = EffectType.select("name").where("id=" + e.base1.to_s)
+				if (stack.first != nil)
+					extra_spell = stack.first.name
+					#puts "*** Stack: id=" + e.base1.to_s + " which is " + extra_spell
+				end
+			# Try to get a spell name in the case of formulas with a value 100, as well as effect ID 153. This happens for procs
+			elsif (e.formula == 100 or e.effect == 153)
 				spelltemp = Spell.select("name").where("spells.id = " + e.base1.to_s)
 				if (spelltemp.first != nil)
 					extra_spell = spelltemp.first.name

@@ -7,7 +7,7 @@ gem 'rails', '3.2.8'
 
 gem 'sqlite3'
 gem 'duration'
-#gem 'mysql2'
+gem 'mysql'
 gem "mysql2", "~> 0.3.11"
 gem "htmlentities"
 gem "activerecord-import"
