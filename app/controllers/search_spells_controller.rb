@@ -22,9 +22,9 @@ class SearchSpellsController < ApplicationController
         effects = Effect.select("*").where("spell_id=" + spell_id.to_s).order("slot")
         #pp effects
         effects.each do |e|
-			# Try to get a spell name in the case of formulas with a value 100. This happens for procs
+			# Try to get a spell name in the case of formulas with a value 100, as well as effect ID 153. This happens for procs
 			extra_spell = ""
-			if (e.formula == 100)
+			if (e.formula == 100 || e.effect == 153)
 				spelltemp = Spell.select("name").where("spells.id = " + e.base1.to_s)
 				if (spelltemp.first != nil)
 					extra_spell = spelltemp.first.name

@@ -374,7 +374,11 @@ class ParseSpellsTxt
             when 108
                 return "Summon Familiar: " + extra
             when 109
-                return "Summon: Item " + base1.to_s
+                return "Summon: Item " + base1.to_i
+			when 110
+				# This one is a bit special - effect depends on formula
+				return GetEffectPercentDescriptorSingle("Archery Accuracy", base1) if formula == 200
+				return GetEffectPercentDescriptorSingle("Archery Damage", base1) if formula == 400
             when 111
                 return GetEffectDescriptor("All Resists", value)
             when 112
@@ -399,7 +403,10 @@ class ParseSpellsTxt
                 return GetEffectDescriptor("Reverse Damage Shield", -value)
             when 123
                 return "Screech"
-
+			when 153
+				# Autocast
+				effect_name = use_html ? ("<a href='search_spells/detail?spell_id=" + base1.to_s + "'>" + extra_spell_name + "</a>") : extra_spell_name
+				return "Auto cast: " + effect_name 
 			else
 				return "Unknown effect: " + effect.to_s
 		end
@@ -414,7 +421,7 @@ class ParseSpellsTxt
 	def self.CalculateEffectValue(formula, base1, max, tick, level)
 		return base1 if formula == 0
 		
-		if (formula == 100)
+		if (formula == 100 or formula == 200 or formula == 400)
 			return max if (max > 0 and base1 > max)
 			return base1
 		end
