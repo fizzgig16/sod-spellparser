@@ -32,7 +32,7 @@ class SearchSpellsController < ApplicationController
 					#puts "*** Stack: id=" + e.base1.to_s + " which is " + extra_spell
 				end
 			# Try to get a spell name in the case of formulas with a value 100, as well as effect ID 153. This happens for procs
-			elsif (e.formula == 100 or e.effect == 153)
+			elsif (e.formula == 100 or e.effect == 139 or e.effect == 153)
 				spelltemp = Spell.select("name").where("spells.id = " + e.base1.to_s)
 				if (spelltemp.first != nil)
 					extra_spell = spelltemp.first.name

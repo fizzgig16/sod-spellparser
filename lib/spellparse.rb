@@ -407,6 +407,10 @@ class ParseSpellsTxt
 				# This means that aego will NOT stack with spells that have an effect modifying Total HP in slot 1
 				# Clear as mud?
 				return "Forced Spell Stacking: will not stack with other spells affecting " + extra_spell_name + " in this slot"
+			when 132
+				return GetEffectPercentDescriptorSingle("Mana Cost", value)
+			when 139
+				return "Excludes spell: " + extra_spell_name
 			when 153
 				# Autocast
 				effect_name = use_html ? ("<a href='search_spells/detail?spell_id=" + base1.to_s + "'>" + extra_spell_name + "</a>") : extra_spell_name
