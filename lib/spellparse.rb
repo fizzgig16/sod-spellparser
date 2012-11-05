@@ -172,7 +172,7 @@ class ParseSpellsTxt
 		return hashSpell
 	end
 
-	def self.GetSpellEffect(effect, base1, base2, max, formula, level, duration, myextra)
+	def self.GetSpellEffect(effect, base1, base2, max, formula, level, duration, myextra, extra_spell_name)
 		effectamt = "0"
 
 		return "" if ((effect == 254) or (effect == 10 && (base1 < 1 or base1 > 255)))
@@ -338,7 +338,9 @@ class ParseSpellsTxt
                 return "Teleport to " + extra
             when 84
                 return "Gravity Flux"
-            when 86
+            when 85
+				return "Proc effect " + extra_spell_name
+			when 86
                 return "Decrease Social Radius to " + value.to_s + maxlevel
             when 87
                 return GetEffectPercentDescriptorSingle("Magnification", value)

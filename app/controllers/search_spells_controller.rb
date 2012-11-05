@@ -20,7 +20,16 @@ class SearchSpellsController < ApplicationController
         effects = Effect.select("*").where("spell_id=" + spell_id.to_s).order("slot")
         #pp effects
         effects.each do |e|
-            strEffect = ParseSpellsTxt.GetSpellEffect(e.effect, e.base1, e.base2, e.max, e.formula, 1, duration, extra)
+			# Try to get a spell name in the case of formulas with a value 100. This happens for procs
+			extra_spell = ""
+			if (e.formula == 100)
+				spelltemp = Spell.select("name").where("spells.id = " + e.base1.to_s)
+				if (spelltemp.first != nil)
+					extra_spell = spelltemp.first.name
+				end
+			end
+
+            strEffect = ParseSpellsTxt.GetSpellEffect(e.effect, e.base1, e.base2, e.max, e.formula, 1, duration, extra, extra_spell)
             if (strEffect != "")
 				strEffect = "Slot " + e.slot.to_s + ": " + strEffect
             	arrEffects << strEffect

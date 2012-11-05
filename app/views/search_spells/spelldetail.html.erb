@@ -3,6 +3,7 @@
 <br/>
 
 <% @spells.each do | spell | %>
+<% @is_self = (spell["target_name"].chomp == "Self" ? true : false) %>
 <table border="1" width="650">
 	<tr>
 		<td colspan="3"><h2><%= spell.name %></h2></td>
@@ -18,13 +19,23 @@
 		<td><b>Skill: </b><%= spell["skill_name"] %></td>
 	</tr>
 	<tr>
-		<td><b>Resist Type: </b><%= (spell["resist_name"] == nil) ? "None" : spell["resist_name"] %></td>
-		<td><b>Resist Adj: </b><%= spell.resist_adj %></td>
+		<td><b>Resist Type: </b>
+			<% if (spell["resist_name"] == nil or spell["resist_name"] == "")
+				if (spell.beneficial == true) %>
+					<%= "N/A" %>
+				<% else %>
+					<%= "Unresistable" %>
+				<% end %>
+			<% else %>
+				<%= spell["resist_name"] %>
+			<% end %>
+		</td>
+		<td><b>Resist Adj: </b><%= (@is_self or (spell["resist_name"] == nil or spell["resist_name"] == ""))  ? "N/A" : spell.resist_adj %></td>
 		<td>&nbsp;</td>
 	</tr>
 	<tr>
-		<td><b>Range: </b><%= spell.range %></td>
-		<td><b>AE Range: </b><%= spell.ae_range %></td>
+		<td><b>Range: </b><%= @is_self ? "N/A" : spell.range %></td>
+		<td><b>AE Range: </b><%= @is_self ? "N/A" : spell.ae_range %></td>
 		<td>&nbsp;</td>
 	</tr>
 	<tr>
@@ -37,7 +48,7 @@
 			<% end %>
 		</td>
 		<td><b>AE Duration: </b><%= spell.ae_duration %></td>
-		<td><b>Push: </b><%= spell.push %></td>
+		<td><b>Push: </b><%= @is_self ? "N/A" : spell.push %></td>
 	</tr>
 	<tr>
 		<td colspan="3"><b>Reagents: </b>
