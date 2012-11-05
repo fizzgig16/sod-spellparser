@@ -1,3 +1,5 @@
+require 'friendlynames'
+
 class ParseSpellsTxt
 	
 	@@hashClassIndex = Hash.new()
@@ -200,10 +202,10 @@ class ParseSpellsTxt
 			when 11
 				return GetEffectPercentDescriptor("Melee Haste", value - 100, max - 100)
 			when 12
-				return "Invisibility (Enhanced " + base1.to_s + ")" if base1 > 1
+				#return "Invisibility (Enhanced " + base1.to_s + ")" if base1 > 1
 				return "Invisibility"
 			when 13
-				return "See Invisible (Enhanced " + base1.to_s + ")" if base1 > 1
+				#return "See Invisible (Enhanced " + base1.to_s + ")" if base1 > 1
 				return "See Invisible"
 			when 14
 				return "Enduring Breath"
@@ -222,7 +224,7 @@ class ParseSpellsTxt
 			when 23
 				return "Fear" 
 			when 24
-				return GetEffectDescriptor("Stamina Loss", value)
+				return GetEffectDescriptor("Stamina Loss", -value)
 			when 25
 				return "Bind" 
 			when 26
@@ -239,9 +241,12 @@ class ParseSpellsTxt
 			when 31
 				return "Mezmerize" + maxlevel
 			when 32
+				# TODO: Try to look up a friendly name
 				return "Summon Item  " + base1.to_s
 			when 33
-				return "Summon Pet  " + extra
+				# Try to get a friendly name
+				name = FriendlyNames.has_key?(extra.strip) ? FriendlyNames[extra.strip] : extra
+				return "Summon " + name
 			when 35
 				return GetEffectDescriptor("Disease Counter", value)
 			when 36
@@ -325,19 +330,18 @@ class ParseSpellsTxt
                 return "Resurrect with " + value.to_s + "% XP" 
             when 82
                 return "Summon Player"
-            when 83
-                return "Teleport to " + extra
+            when 83,88
+				name = FriendlyNames.has_key?(extra.strip) ? FriendlyNames[extra.strip] : extra
+                return "Teleport to " + name
             when 84
                 return "Gravity Flux"
             when 85
-				effect_name = use_html ? ("<a href='detail?spell_id=" + base1.to_s + "'>" + extra_spell_name + "</a>") : extra_spell_name
+				effect_name = use_html ? ("<a href='/search_spells/detail?spell_id=" + base1.to_s + "'>" + extra_spell_name + "</a>") : extra_spell_name
 				return "Add Weapon Proc: " + effect_name
 			when 86
                 return "Decrease Social Radius to " + value.to_s + maxlevel
             when 87
                 return GetEffectPercentDescriptorSingle("Magnification", value)
-            when 88
-                return "Evacuate to " + extra
             when 89
                 return GetEffectPercentDescriptorSingle("Player Size", base1 - 100)
             when 91
@@ -363,16 +367,14 @@ class ParseSpellsTxt
                 return GetEffectDescriptor("Current HP", value) + repeating + range
             when 102
                 return "Fear Immunity"
-            when 103
-                return "Summon Pet"
+            when 103,106,108
+				name = FriendlyNames.has_key?(extra.strip) ? FriendlyNames[extra.strip] : extra
+                return "Summon Pet: " + name
             when 104
-                return "Translocate to " + extra
+				name = FriendlyNames.has_key?(extra.strip) ? FriendlyNames[extra.strip] : extra
+                return "Translocate to " + name
             when 105
                 return "Inhibit Gate"
-            when 106
-                return "Summon Warder: " + extra
-            when 108
-                return "Summon Familiar: " + extra
             when 109
                 return "Summon: Item " + base1.to_i
 			when 110
@@ -386,7 +388,8 @@ class ParseSpellsTxt
             when 113
                 return "Summon Mount: " + extra
             when 114
-                return GetEffectPercentDescriptorSingle("Hate Generated", value)
+                #return GetEffectPercentDescriptorSingle("Hate Generated", value)
+				return GetEffectPercentDescriptorSingle("Agro", value - 100)
             when 115
                 return "Reset Hunger Counter"
             when 116
@@ -407,13 +410,17 @@ class ParseSpellsTxt
 				# This means that aego will NOT stack with spells that have an effect modifying Total HP in slot 1
 				# Clear as mud?
 				return "Forced Spell Stacking: will not stack with other spells affecting " + extra_spell_name + " in this slot"
+			when 125
+				return GetEffectPercentDescriptorSingle("Chance of Critical Heals", base1)
+			when 127
+				return GetEffectPercentDescriptorSingle("Casting Time", base1 - 100)
 			when 132
-				return GetEffectPercentDescriptorSingle("Mana Cost", value)
+				return GetEffectPercentDescriptorSingle("Mana Cost", -value)
 			when 139
-				return "Excludes spell: " + extra_spell_name
+				return "Excludes spell: " + (use_html ? ("<a href='/search_spells/detail?spell_id=" + base1.to_s + "'>" + extra_spell_name + "</a>") : extra_spell_name)
 			when 153
 				# Autocast
-				effect_name = use_html ? ("<a href='search_spells/detail?spell_id=" + base1.to_s + "'>" + extra_spell_name + "</a>") : extra_spell_name
+				effect_name = use_html ? ("<a href='/search_spells/detail?spell_id=" + base1.to_s + "'>" + extra_spell_name + "</a>") : extra_spell_name
 				return "Auto cast: " + effect_name 
 			else
 				return "Unknown effect: " + effect.to_s
