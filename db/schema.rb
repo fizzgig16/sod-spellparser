@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121103170838) do
+ActiveRecord::Schema.define(:version => 20121105114638) do
 
   create_table "char_classes", :force => true do |t|
     t.string   "name"
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(:version => 20121103170838) do
     t.integer  "skill_id"
     t.boolean  "beneficial"
     t.string   "extra"
+    t.integer  "recourse_id"
   end
 
   create_table "target_types", :force => true do |t|

@@ -33,6 +33,7 @@ GEM
     duration (0.1.0)
     erubis (2.7.0)
     hike (1.2.1)
+    htmlentities (4.3.1)
     i18n (0.6.0)
     journey (1.0.4)
     json (1.7.5)
@@ -85,6 +86,7 @@ PLATFORMS
 
 DEPENDENCIES
   duration
+  htmlentities
   mysql2 (~> 0.3.11)
   rails (= 3.2.8)
   sqlite3

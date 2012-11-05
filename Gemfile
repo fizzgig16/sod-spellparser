@@ -9,6 +9,7 @@ gem 'sqlite3'
 gem 'duration'
 #gem 'mysql2'
 gem "mysql2", "~> 0.3.11"
+gem "htmlentities"
 
 # Use unicorn as the web server
 # gem 'unicorn'

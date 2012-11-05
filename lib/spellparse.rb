@@ -75,6 +75,7 @@ class ParseSpellsTxt
 		# 118: beastloard min level
 		# 144: icon 2
 		# 147: resist adjust
+		# 150: recourse spell ID
 		#
 		# 20-31: minimum values on effects (see 86-97)
 		# 32-55: max values (32 - 43 seem to be weird)
@@ -115,16 +116,15 @@ class ParseSpellsTxt
 		hashSpell["skillid"] = arrParts[100]
 		hashSpell["zonetypeid"] = arrParts[101]
 		hashSpell["resistadj"] = arrParts[147]
+		hashSpell["recourseid"] = arrParts[150]
 		
 		# Get per-class levels
 		for i in 104..118
 			level = arrParts[i]
-			#hashSpell[@@hashClassIndex[i] + "lvl"] = level
 			hashSpell[i.to_s + "lvl"] = level
 		end
 
 		# Get effects
-
 		sloteffectformvalue = Hash.new
 		sloteffectid = Hash.new
 		sloteffectbase1 = Hash.new
@@ -132,35 +132,18 @@ class ParseSpellsTxt
 		sloteffectmax = Hash.new
 
 		for i in 86..98
-			# effect = ""
 			effectid = arrParts[i]
 			effectformula = arrParts[i - 16]
 			base1val = arrParts[i - 66].to_i
 			maxval = arrParts[i - 42].to_i
 			base2val = arrParts[i - 54].to_i
 	
-			#puts("Effect formula: " + effectformula + " type: " + effectid.to_s + " min: " + minval.to_s + ", max: " + maxval.to_s)
-
-			#if (effectid.to_i < 200)
-				#form_value = GetSpellFormula(effectformula.to_i, minval, maxval)
-				#effect = form_value
-				#if (effectid != "11" and effectid != "123")
-			#		if (minval < 0 and maxval < 0 and (minval.abs != maxval.abs))
-			#			effect = effect + " to " + maxval.to_s
-			#		elsif (minval < 0 and maxval != 0 and (minval.abs != maxval.abs))
-			#			effect = effect + " to -" + maxval.to_s
-			#		elsif (maxval > 0 and (minval.abs != maxval.abs))
-			#			effect = effect + " to " + maxval.to_s
-			#		end
-			#	end				
-
-				sloteffectformvalue[i - 86] = effectformula
-				sloteffectid[i - 86] = effectid
-				sloteffectbase1[i - 86] = base1val
-				sloteffectbase2[i - 86] = base2val
-				sloteffectmax[i - 86] = maxval
-				#puts "Slot " + (i - 86).to_s + ": Effect type:" + effectid.to_s + " Effect amount: " + effect
-			#end
+			sloteffectformvalue[i - 86] = effectformula
+			sloteffectid[i - 86] = effectid
+			sloteffectbase1[i - 86] = base1val
+			sloteffectbase2[i - 86] = base2val
+			sloteffectmax[i - 86] = maxval
+			#puts "Slot " + (i - 86).to_s + ": Effect type:" + effectid.to_s + " Effect amount: " + effect
 		end
 		
 		hashSpell["sloteffectformulaval"] = sloteffectformvalue
@@ -173,6 +156,14 @@ class ParseSpellsTxt
 	end
 
 	def self.GetSpellEffect(effect, base1, base2, max, formula, level, duration, myextra, extra_spell_name)
+		return GetSpellEffectInner(effect, base1, base2, max, formula, level, duration, myextra, extra_spell_name, true)
+	end
+
+	def self.GetSpellEffectNoHTML(effect, base1, base2, max, formula, level, duration, myextra, extra_spell_name)
+		return GetSpellEffectInner(effect, base1, base2, max, formula, level, duration, myextra, extra_spell_name, false)
+	end
+
+	def self.GetSpellEffectInner(effect, base1, base2, max, formula, level, duration, myextra, extra_spell_name, use_html)
 		effectamt = "0"
 
 		return "" if ((effect == 254) or (effect == 10 && (base1 < 1 or base1 > 255)))
@@ -339,7 +330,8 @@ class ParseSpellsTxt
             when 84
                 return "Gravity Flux"
             when 85
-				return "Proc effect " + extra_spell_name
+				effect_name = use_html ? ("<a href='detail?spell_id=" + base1.to_s + "'>" + extra_spell_name + "</a>") : extra_spell_name
+				return "Add Weapon Proc: " + effect_name
 			when 86
                 return "Decrease Social Radius to " + value.to_s + maxlevel
             when 87

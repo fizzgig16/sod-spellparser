@@ -72,10 +72,15 @@
 		<td colspan="3"><b>Effects:</b><br/>
 			<% @arrEffects.each do | effect | %>
 				<% next if effect == "" %>
-				<%= effect %><br/>
+				<%= raw(effect) %><br/>
 			<% end %>	
 		</td>
 	</tr>
+	<% if (spell["recourse_name"] != nil and spell["recourse_name"] != "") %>
+		<tr>
+			<td colspan="3"><b>Recourse: </b><%= link_to spell["recourse_name"], detail_search_spells_path(:spell_id => spell.recourse_id) %></td>
+		</tr>
+	<% end %> 
 	<tr>
 		<td colspan="3"><b>Cast on You: </b><%= spell["castonyou"] %></td>
 	</tr>

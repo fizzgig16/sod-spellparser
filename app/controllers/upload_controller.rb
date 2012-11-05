@@ -19,9 +19,6 @@ class UploadController < ApplicationController
 		arrSpells = parser.ParseFile("spells_us.txt")
 		arrSpells.each do |spell|
     		strClasses = ""
-	    	#if (spell["drulvl"] != "255")
-		    #	strClasses = "DRU(" + spell["drulvl"].to_s() + ")"
-			#end
 			
 			recSpell = Spell.new
 			recSpell.id = spell["id"].to_i
@@ -52,6 +49,7 @@ class UploadController < ApplicationController
         	recSpell.zone_type_id = spell["zonetypeid"]
         	recSpell.resist_adj = spell["resistadj"]
 			recSpell.beneficial = spell["beneficial"]
+			recSpell.recourse_id = spell["recourseid"]
 
 			recSpell.save
 
@@ -94,11 +92,6 @@ class UploadController < ApplicationController
 				#puts "Slot effect: " + effectid.to_s
 			end
 
-			#puts(spell["id"].to_s() + ": " + spell["name"] + " > " + strClasses)
-			#  puts(spell["reagent1id"])
-			#        puts(spell["reagent2id"])
-			#        end
-			#raise if spell["id"].to_i > 10
 		end
 
 		FileUtils.rm file	
