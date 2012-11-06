@@ -75,24 +75,24 @@ class UploadController < ApplicationController
 			for i in 0..11
 				# Is this a real effect? (effect id < 200)
 				effectid = spell["sloteffectid"][i]
-				if (effectid.to_i < 200)
-					# Get the rest of the effect data
-					formula = spell["sloteffectformulaval"][i]
-					base1 = spell["sloteffectbase1"][i]
-					base2 = spell["sloteffectbase2"][i]
-					max = spell["sloteffectmax"][i]
+				
+				# Get the rest of the effect data
+				formula = spell["sloteffectformulaval"][i]
+				base1 = spell["sloteffectbase1"][i]
+				base2 = spell["sloteffectbase2"][i]
+				max = spell["sloteffectmax"][i]
+				
+				recEffect = Effect.new
+				recEffect.effect = effectid
+				recEffect.spell_id = spell["id"].to_i
+				recEffect.slot = (i + 1).to_s
+				recEffect.formula = formula
+				recEffect.base1 = base1
+				recEffect.base2 = base2
+				recEffect.max = max
+				recEffect.real_effect = (effectid.to_i < 200 ? true : false)
 					
-					recEffect = Effect.new
-					recEffect.effect = effectid
-					recEffect.spell_id = spell["id"].to_i
-					recEffect.slot = (i + 1).to_s
-					recEffect.formula = formula
-					recEffect.base1 = base1
-					recEffect.base2 = base2
-					recEffect.max = max
-
-					records_effects << recEffect
-				end
+				records_effects << recEffect
 				#puts "Slot effect: " + effectid.to_s
 			end
 

@@ -23,7 +23,10 @@ class SearchSpellsController < ApplicationController
         #pp effects
         effects.each do |e|
 			extra_spell = ""
-			
+			extra_data = ""
+
+			next if not e.real_effect
+
 			if (e.effect == 123)
 				# Forced spell stacking, set extra_spell as the effect that won't stack
 				stack = EffectType.select("name").where("id=" + e.base1.to_s)
@@ -31,8 +34,30 @@ class SearchSpellsController < ApplicationController
 					extra_spell = stack.first.name
 					#puts "*** Stack: id=" + e.base1.to_s + " which is " + extra_spell
 				end
-			# Try to get a spell name in the case of formulas with a value 100, as well as effect ID 153. This happens for procs
+			elsif (e.effect == 83 or e.effect == 88 or e.effect == 104)
+				# Transport spells. Need to extract additional data from other slots
+				puts "Transport spell!"
+	
+				ew = ""
+				z = ""
+				heading = ""
+	
+				effects.each do |e2|
+					case e2.slot
+						when 2
+							ew = e2.base1.to_s
+						when 3
+							z = e2.base1.to_s
+						when 4
+							heading = e2.base1.to_s
+					end
+				end
+
+				ns = e.base1.to_s
+
+				extra_data = " (" + ns + ", " + ew + ", " + z + ", " + heading + ")"			
 			elsif (e.formula == 100 or e.effect == 139 or e.effect == 153)
+				# Try to get a spell name in the case of formulas with a value 100, as well as effect ID 153. This happens for procs
 				spelltemp = Spell.select("name").where("spells.id = " + e.base1.to_s)
 				if (spelltemp.first != nil)
 					extra_spell = spelltemp.first.name
@@ -42,6 +67,7 @@ class SearchSpellsController < ApplicationController
             strEffect = ParseSpellsTxt.GetSpellEffect(e.effect, e.base1, e.base2, e.max, e.formula, 1, duration, extra, extra_spell)
             if (strEffect != "")
 				strEffect = "Slot " + e.slot.to_s + ": " + strEffect
+				strEffect = strEffect + extra_data if extra_data != ""
             	arrEffects << strEffect
 			end
         end
