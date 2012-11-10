@@ -180,7 +180,7 @@ class ParseSpellsTxt
 			when 0
 				return GetEffectDescriptor("Current HP", value) + (duration > 0 ? " per tick" : "")
 			when 1
-				return GetEffectDescriptor("AC", (value / (10 / 3).to_i))
+				return GetEffectDescriptor("AC", ((value * 0.29).to_i))
 			when 2
 				return GetEffectDescriptor("ATK", value) + range
 			when 3
@@ -444,7 +444,7 @@ class ParseSpellsTxt
 		effectamt = 0
 		case formula
             when 100
-                effectamt = base1.to_s
+                effectamt = 0
             when 101
                 effectamt = level / 2
             when 102
@@ -456,15 +456,27 @@ class ParseSpellsTxt
             when 105
                 effectamt = level * 4
 			when 107
-				effectamt = -1 * tick
+				effectamt = 0
 			when 108
-				effectamt = -2 * tick
+				effectamt = 0
             when 109
                 effectamt = level / 4
             when 110
+                effectamt = level / 5
+            when 111
                 effectamt = level / 6
-            when 119
+            when 112
+                effectamt = level / 7
+            when 113
                 effectamt = level / 8
+            when 114
+                effectamt = level / 9
+            when 119
+                effectamt = level / 7
+            when 121
+                effectamt = level / 2
+            when 122
+                effectamt = 0
 			else
 				return "Unknown effect: " + formula.to_s
         end
@@ -481,14 +493,8 @@ class ParseSpellsTxt
 		direction = start.abs < finish.abs ? "increasing" : "decreasing"
 
 		case formula
-			when 107
-				return direction " to " + finish.to_s + " at 1/tick"
-			when 108
-				return direction " to " + finish.to_s + " at 2/tick"
-			when 120
-				return direction " to " + finish.to_s + " at 5/tick"
 			when 122
-				return direction " to " + finish.to_s + " at 12/tick"
+				return direction + " to " + finish.to_s + " at 12/tick"
 			when 123
 				return "Random: " + base1.to_s + " to " + (max * ((base1 >= 0) ? 1 : -1)).to_s
 			else
