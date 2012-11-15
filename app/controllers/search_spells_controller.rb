@@ -36,11 +36,8 @@ class SearchSpellsController < ApplicationController
 				end
 			elsif (e.effect == 83 or e.effect == 88 or e.effect == 104)
 				# Transport spells. Need to extract additional data from other slots
-				puts "Transport spell!"
-	
 				ew = ""
 				z = ""
-				heading = ""
 	
 				effects.each do |e2|
 					case e2.slot
@@ -48,14 +45,17 @@ class SearchSpellsController < ApplicationController
 							ew = e2.base1.to_s
 						when 3
 							z = e2.base1.to_s
-						when 4
-							heading = e2.base1.to_s
 					end
 				end
 
 				ns = e.base1.to_s
 
-				extra_data = " (" + ns + ", " + ew + ", " + z + ", " + heading + ")"			
+				# All values are -1 for succor-type spells
+				if (ns == "-1" and ew == "-1" and z = "-1")
+					extra_data = " (safe spot)"
+				else
+					extra_data = " (" + ns + ", " + ew + ", " + z + ")"			
+				end
 			elsif (e.formula == 100 or e.effect == 139 or e.effect == 153)
 				# Try to get a spell name in the case of formulas with a value 100, as well as effect ID 153. This happens for procs
 				spelltemp = Spell.select("name").where("spells.id = " + e.base1.to_s)
@@ -107,6 +107,7 @@ class SearchSpellsController < ApplicationController
 	def index
 		if (params[:s])
 			name = params[:spell_name]
+			castmsg = params[:cast_msg]
 			manamin = params[:minmana]
 			manamax = params[:maxmana]
 			levelmin = params[:levelmin]
@@ -119,6 +120,10 @@ class SearchSpellsController < ApplicationController
 			conditionsClass = ""
 
 			arrConditions << "spells.name LIKE '%" + name + "%'" if name != ""
+			if (castmsg != "")
+				arrConditions << "(spells.castonyou LIKE '%" + castmsg + "%' or spells.castonother LIKE '%" + castmsg + "%')"
+			end
+
 			arrConditions << "mana_cost >= " + manamin.to_s if manamin != ""
 			arrConditions << "mana_cost <= " + manamax.to_s if manamax != ""
 			arrConditions << "(reagent1_id > 0 OR reagent2_id > 0)" if params[:requiresreagent]

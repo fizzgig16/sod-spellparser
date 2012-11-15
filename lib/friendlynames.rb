@@ -211,4 +211,7 @@ FriendlyNames = {
 "magicdog" => "Magic Dog",
 "DruidPet2" => "Druid Pet",
 "underhill" => "Underhill"
+
+
+
 }
