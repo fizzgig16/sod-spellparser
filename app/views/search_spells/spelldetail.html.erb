@@ -40,14 +40,21 @@
 	</tr>
 	<tr>
 		<td><b>Duration: </b>
-			<% if (spell.duration > 0) %>
+			<% if (spell.ae_duration == 7500) %>
+				<!-- Rain-type spell -->
+				Rain
+			<% elsif (spell.duration > 0) %>
 				<% duration = Duration.new(spell.duration.to_i * 6) %>
 				<%= spell.duration %> ticks (<%= duration.to_s %>)
 			<% else %>
 				Instant
 			<% end %>
 		</td>
-		<td><b>AE Duration: </b><%= spell.ae_duration %></td>
+		<td><b>AE Duration: </b>
+			<% if (spell.ae_duration != 7500) %>
+				<%= spell.ae_duration %>
+			<% end %>
+		</td>
 		<td><b>Push: </b><%= @is_self ? "N/A" : spell.push %></td>
 	</tr>
 	<tr>

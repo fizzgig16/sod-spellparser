@@ -106,8 +106,8 @@ class SearchSpellsController < ApplicationController
 
 	def index
 		if (params[:s])
-			name = params[:spell_name]
-			castmsg = params[:cast_msg]
+			name = params[:spell_name].gsub("'", "''")
+			castmsg = params[:cast_msg].gsub("'", "''")
 			manamin = params[:minmana]
 			manamax = params[:maxmana]
 			levelmin = params[:levelmin]
