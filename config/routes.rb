@@ -24,6 +24,7 @@ Spellparser::Application.routes.draw do
   resources :search_spells do
 	collection do
 		get 'detail'
+		#get 'show'
 	end
   end
 

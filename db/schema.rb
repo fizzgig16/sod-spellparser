@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121106020141) do
+ActiveRecord::Schema.define(:version => 20121116183446) do
 
   create_table "char_classes", :force => true do |t|
     t.string   "name"
@@ -37,6 +37,14 @@ ActiveRecord::Schema.define(:version => 20121106020141) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.boolean  "real_effect"
+  end
+
+  create_table "illusions", :force => true do |t|
+    t.string   "name"
+    t.integer  "model1"
+    t.integer  "model2"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "map_spell_to_char_classes", :force => true do |t|

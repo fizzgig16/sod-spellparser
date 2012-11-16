@@ -10,11 +10,16 @@ NORMAL_JOIN += "LEFT JOIN spells AS recourse ON recourse.id = spells.recourse_id
 class SearchSpellsController < ApplicationController
 	
 	def create
-	
+		head :ok
 	end
 
 	def show
-	
+		if (params[:id] == "sod-logo")
+			head :ok
+		else
+			render :index
+		end
+		#head :ok	
 	end
 	
 	def GetSpellEffects(spell_id, duration, extra)
@@ -51,11 +56,16 @@ class SearchSpellsController < ApplicationController
 				ns = e.base1.to_s
 
 				# All values are -1 for succor-type spells
-				if (ns == "-1" and ew == "-1" and z = "-1")
+				if (ns == "-1" and ew == "-1" and z == "-1")
 					extra_data = " (safe spot)"
 				else
 					extra_data = " (" + ns + ", " + ew + ", " + z + ")"			
 				end
+			elsif (e.effect == 58)
+				# Illusion - figure out the name and send it as "extra"
+				illusion = Illusion.select("name").where("model1=" + e.base1.to_s + " and model2=" + e.max.to_s)
+				extra = ""
+				extra = (illusion.first != nil) ? illusion.first.name : "" 
 			elsif (e.formula == 100 or e.effect == 139 or e.effect == 153)
 				# Try to get a spell name in the case of formulas with a value 100, as well as effect ID 153. This happens for procs
 				spelltemp = Spell.select("name").where("spells.id = " + e.base1.to_s)
