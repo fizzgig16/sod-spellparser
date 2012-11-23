@@ -94,5 +94,14 @@
 	<tr>
 		<td colspan="3"><b>Cast on Other: </b><% if spell["castonother"] != "" %>Target <%= spell["castonother"] %><% end %></td>
 	</tr>
+	<tr>
+		<% if @hashStacks and @hashStacks.length > 0 %>
+			<td colspan="3"><b>Spells that Will Not Stack:</b><p>
+			<% @hashStacks.each do |stack| %>
+				<%= link_to stack[1], detail_search_spells_path(:spell_id => stack[0]) %><br/>
+			<% end %>
+			</p></td>
+		<% end %>
+	</tr>
 </table>
 <% end %>

@@ -19,13 +19,14 @@ class SearchSpellsController < ApplicationController
 		else
 			render :index
 		end
-		#head :ok	
 	end
 	
 	def GetSpellEffects(spell_id, duration, extra)
+		hashStackedSpells = Hash.new
 		arrEffects = Array.new
         effects = Effect.select("*").where("spell_id=" + spell_id.to_s).order("slot")
         #pp effects
+
         effects.each do |e|
 			extra_spell = ""
 			extra_data = ""
@@ -39,6 +40,16 @@ class SearchSpellsController < ApplicationController
 					extra_spell = stack.first.name
 					#puts "*** Stack: id=" + e.base1.to_s + " which is " + extra_spell
 				end
+	
+				# Also get a list of all spells that share this stacking conflict - output it at the bottom
+		        stacked_effects = Effect.select("DISTINCT *").joins("INNER JOIN spells ON effects.spell_id = spells.id").where("effect = 123 and base1=" + e.base1.to_s + " and spell_id !=" + e.spell_id.to_s + " and max = " + e.max.to_s).order("spells.name")
+				stacked_effects.each do |stacked_spell|
+					# Get the name
+					unless hashStackedSpells.has_key?(stacked_spell.spell_id)
+						hashStackedSpells[stacked_spell.spell_id] = stacked_spell.name 
+					end
+				end
+				
 			elsif (e.effect == 83 or e.effect == 88 or e.effect == 104)
 				# Transport spells. Need to extract additional data from other slots
 				ew = ""
@@ -82,7 +93,7 @@ class SearchSpellsController < ApplicationController
 			end
         end
 
-		return arrEffects
+		return arrEffects, hashStackedSpells
 	end
 
 	def GetSpellClasses(spell_id)
@@ -103,12 +114,11 @@ class SearchSpellsController < ApplicationController
 		
 		# For a given spell, pull in its classes
 		@spells.each do | spell |
-			pp "Recourse ID: " + spell.recourse_id.to_s
 			@class = GetSpellClasses(spell.id)
 			spell["classes"] = @class.first["classes"]
 
 			# Also pull in effects and calculate results
-			@arrEffects = GetSpellEffects(spell.id, spell.duration, spell.extra)
+			@arrEffects,@hashStacks = GetSpellEffects(spell.id, spell.duration, spell.extra)
 		end
 		
 		render :spelldetail
@@ -188,12 +198,14 @@ class SearchSpellsController < ApplicationController
 				@class = GetSpellClasses(@spell_id)
 
             	# Also pull in effects and calculate results
-            	@arrEffects = GetSpellEffects(@spell_id, @spells.first.duration, @spells.first.extra)
+            	@arrEffects,@hashStacks = GetSpellEffects(@spell_id, @spells.first.duration, @spells.first.extra)
 
 				render :spelldetail
 			else
 				render :spelllist
 			end
+		else
+			# Just rendering the search page - help out by creating an array of combo box stuff
 		end
 	end
 

@@ -23,7 +23,6 @@ class ParseSpellsTxt
 		arrSpells = Array.new
 		f = File.open("spells_us.txt", "r")
 		f.each do | line |
-			#next unless line.start_with?("3256")
 			hashLine = ReadRecord(line.chomp!())
 			arrSpells << hashLine
 		end
@@ -202,7 +201,6 @@ class ParseSpellsTxt
 			when 11
 				return GetEffectPercentDescriptor("Melee Haste", value - 100, max - 100)
 			when 12
-				#return "Invisibility (Enhanced " + base1.to_s + ")" if base1 > 1
 				return "Invisibility"
 			when 13
 				#return "See Invisible (Enhanced " + base1.to_s + ")" if base1 > 1
@@ -400,11 +398,12 @@ class ParseSpellsTxt
             when 121
                 return GetEffectDescriptor("Reverse Damage Shield", -value)
             when 123
-                # Forced spell stacking. base1 is the effect that drives the stacking
+                # Forced spell stacking. base1 is the effect that drives the stacking, though two spells with the same base1 with
+				# different "max" values *will* stack (like focus and aego)
 				# Example: aegolism has effect 123 in slot 1, with base1=69, which is Total HP
-				# This means that aego will NOT stack with spells that have an effect modifying Total HP in slot 1
+				# This means that aego will NOT stack with spells that have an effect modifying Total HP if their max is the same (2)
 				# Clear as mud?
-				return "Forced Spell Stacking: will not stack with other spells affecting " + extra_spell_name + " in this slot"
+				return "Forced Spell Stacking: will not stack with other spells affecting " + extra_spell_name
 			when 125
 				return GetEffectPercentDescriptorSingle("Chance of Critical Heals", base1)
 			when 127
@@ -495,7 +494,7 @@ class ParseSpellsTxt
             when 169
                 effectamt = level * 18
 			else
-				return "Unknown effect: " + formula.to_s
+				return 0
         end
 
 		value = base1.abs + effectamt
