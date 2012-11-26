@@ -8,11 +8,90 @@ NORMAL_JOIN += "INNER JOIN target_types AS target ON target.id = spells.target_t
 NORMAL_JOIN += "LEFT JOIN spells AS recourse ON recourse.id = spells.recourse_id "
 
 class SearchSpellsController < ApplicationController
+
+	before_filter :sanitize_params
+
+protected
+	def valid_int?(i)
+		return i.to_i().to_s() == i
+	end
+
+	def sanitize_params
+		# Validate all parameters
+		# This is ugly, but works. Rails makes this kind of crap WAY too complex IMO, so I'm using the brute-force method
+		errors = ""
+		arrClasses = [ :war, :clr, :pal, :rng, :shd, :dur, :mnk, :brd, :rog, :shm, :nec, :wiz, :mag, :enc, :bst ]
+		arrResists = [ :magic_resist, :cold_resist, :fire_resist, :poison_resist, :disease_resist ]
+		regexAllowed = "^[a-zA-Z0-9'!]*$"
+
+        if (params[:minmana] and params[:minmana] != "")
+			errors += "<br/>Min mana must be an integer" if (not valid_int?(params[:minmana]))	
+		end
+           
+		if (params[:maxmana] and params[:maxmana] != "")
+			errors += "<br/>Max mana must be an integer" if (not valid_int?(params[:maxmana]))	
+		end
+
+		if (params[:levelmin] and params[:levelmin] != "")
+			errors += "<br/>Min level must be an integer" if (not valid_int?(params[:levelmin]))	
+		end
+           
+		if (params[:levelmax] and params[:levelmax] != "")
+			errors += "<br/>Max level must be an integer" if (not valid_int?(params[:levelmax]))	
+		end
+
+		if (params[:spellid] and params[:spellid] != "")
+			errors += "<br/>Spell ID must be an integer" if (not valid_int?(params[:spellid]))	
+		end
+
+		if (params[:spell_id] and params[:spell_id] != "")
+			errors += "<br/>Spell ID must be an integer" if (not valid_int?(params[:spell_id]))	
+		end
+
+		if (params[:beneficial] and params[:beneficial] != "")
+			errors += "<br/>Beneficial flag must be an integer" if (not valid_int?(params[:beneficial]))	
+		end
+
+		if (params[:requiresreagent] and params[:requiresreagent] != "")
+			errors += "<br/>Reagent flag must be an integer" if (not valid_int?(params[:beneficial]))	
+		end
+
+		arrClasses.each do |myclass|
+			if (params[myclass] and params[myclass] != "")
+				errors += "<br/>One or more classes has an invalid value" if (not valid_int?(params[myclass]))	
+				break
+			end
+		end
+		
+		arrResists.each do |resist|
+			if (params[resist] and params[resist] != "")
+				errors += "<br/>One or more resists has an invalid value" if (not valid_int?(params[resist]))	
+				break
+			end
+		end
+
+		if (params[:spell_name] != nil and params[:spell_name] != "")
+			puts("Spell name: " + params[:spell_name])
+			unless (params[:spell_name] =~ /#{regexAllowed}/)
+				errors += "<br/>Spell name contains an invalid character"
+			end	
+		end
+
+		if (params[:cast_msg] != nil and params[:cast_msg] != "")
+			unless (params[:cast_msg] =~ /#{regexAllowed}/)
+				errors += "<br/>Cast message contains an invalid character"
+			end	
+		end
+
+		# Propagate to display pages
+		flash[:notice] = errors
+	end
 	
 	def create
 		head :ok
 	end
 
+public
 	def show
 		if (params[:id] == "sod-logo")
 			head :ok
@@ -21,7 +100,7 @@ class SearchSpellsController < ApplicationController
 		end
 	end
 	
-	def GetSpellEffects(spell_id, duration, extra)
+	def GetSpellEffects(spell_id, beneficial, duration, extra)
 		hashStackedSpells = Hash.new
 		arrEffects = Array.new
         effects = Effect.select("*").where("spell_id=" + spell_id.to_s).order("slot")
@@ -91,6 +170,21 @@ class SearchSpellsController < ApplicationController
 				strEffect = strEffect + extra_data if extra_data != ""
             	arrEffects << strEffect
 			end
+
+			# Get stacking conflicts not already captured - this is done by looking for beneficial spells with the same effect and slot
+			# Note that base1=0 is just legacy stuff, and should be ignored
+			# Don't need to do for detrimental spells
+			if (beneficial)
+				unless (e.base1 == 0 or e.effect == 32)		# 32 is summoned - no silly stacks there!
+					stacked_effects = Effect.select("DISTINCT *").joins("INNER JOIN spells ON effects.spell_id = spells.id").where("beneficial = 1 and base1 != 0 and effect = " + e.effect.to_s + " and slot = " + e.slot.to_s).order("spells.name")
+	    	        stacked_effects.each do |stacked_spell|
+	        	        # Get the name
+	            	    unless hashStackedSpells.has_key?(stacked_spell.spell_id)
+	                	    hashStackedSpells[stacked_spell.spell_id] = stacked_spell.name
+	        	        end
+	            	end
+				end
+			end
         end
 
 		return arrEffects, hashStackedSpells
@@ -103,6 +197,11 @@ class SearchSpellsController < ApplicationController
 	def detail
 		# Called to render spell detail view
 		#pp "Spell ID: " + params[:spell_id].to_s
+		if (flash[:notice] != "")
+			render :spelldetail
+			return
+		end
+
 		if (params[:spell_id] != nil and params[:spell_id] != "")
 			spell_id = params[:spell_id]
 		else
@@ -118,14 +217,20 @@ class SearchSpellsController < ApplicationController
 			spell["classes"] = @class.first["classes"]
 
 			# Also pull in effects and calculate results
-			@arrEffects,@hashStacks = GetSpellEffects(spell.id, spell.duration, spell.extra)
+			@arrEffects,@hashStacks = GetSpellEffects(spell.id, spell.beneficial, spell.duration, spell.extra)
 		end
 		
 		render :spelldetail
 	end
 
 	def index
+		
 		if (params[:s])
+			if (flash[:notice] != "")
+				render :spelldetail
+				return
+			end
+
 			name = params[:spell_name].gsub("'", "''")
 			castmsg = params[:cast_msg].gsub("'", "''")
 			manamin = params[:minmana]
@@ -144,19 +249,19 @@ class SearchSpellsController < ApplicationController
 				arrConditions << "(spells.castonyou LIKE '%" + castmsg + "%' or spells.castonother LIKE '%" + castmsg + "%')"
 			end
 
-			arrConditions << "mana_cost >= " + manamin.to_s if manamin != ""
-			arrConditions << "mana_cost <= " + manamax.to_s if manamax != ""
-			arrConditions << "(reagent1_id > 0 OR reagent2_id > 0)" if params[:requiresreagent]
+			arrConditions << "spells.mana_cost >= " + manamin.to_s if manamin != ""
+			arrConditions << "spells.mana_cost <= " + manamax.to_s if manamax != ""
+			arrConditions << "(spells.reagent1_id > 0 OR spells.reagent2_id > 0)" if params[:requiresreagent]
 			arrConditions << "spells.beneficial = 't'" if params[:beneficial] == "2"
 			arrConditions << "spells.beneficial = 'f'" if params[:beneficial] == "3"
 			arrConditions << "char_classes.level >= " + levelmin.to_s if levelmin != ""
 			arrConditions << "char_classes.level <= " + levelmax.to_s if levelmax != ""
 	
-			arrConditionsResist << "resist_type_id = 1" if params[:magic_resist]
-			arrConditionsResist << "resist_type_id = 2" if params[:fire_resist]
-			arrConditionsResist << "resist_type_id = 3" if params[:cold_resist]
-			arrConditionsResist << "resist_type_id = 4" if params[:poison_resist]
-			arrConditionsResist << "resist_type_id = 5" if params[:disease_resist]
+			arrConditionsResist << "spells.resist_type_id = 1" if params[:magic_resist]
+			arrConditionsResist << "spells.resist_type_id = 2" if params[:fire_resist]
+			arrConditionsResist << "spells.resist_type_id = 3" if params[:cold_resist]
+			arrConditionsResist << "spells.resist_type_id = 4" if params[:poison_resist]
+			arrConditionsResist << "spells.resist_type_id = 5" if params[:disease_resist]
 
 			arrConditionsClass << "char_classes.class_id = 1" if params[:war]
 			arrConditionsClass << "char_classes.class_id = 2" if params[:clr]
@@ -198,7 +303,7 @@ class SearchSpellsController < ApplicationController
 				@class = GetSpellClasses(@spell_id)
 
             	# Also pull in effects and calculate results
-            	@arrEffects,@hashStacks = GetSpellEffects(@spell_id, @spells.first.duration, @spells.first.extra)
+            	@arrEffects,@hashStacks = GetSpellEffects(@spell_id, @spells.first.beneficial, @spells.first.duration, @spells.first.extra)
 
 				render :spelldetail
 			else

@@ -1,33 +1,40 @@
-<% if @spells.length == 0 %>
-	<h1>Your search produced no results. Please try different search parameters</h1>
-<% elsif @spells.length == 1
-	#redirect_to detail_search_spells_path(:spell_id => @spells.first.id)
-	#redirect_to :controller => 'search_spells', :action => 'detail', :spell_id => @spells.first.id
-%>
-<% else %>
-	<h2>Your search returned the following results (<%= @spells.length %> found):</h2>
-	<br/>
+<h1>Search Results</h1>
+<br/>
 
-	<table border="1">
-		<tr>
-			<td class="spelllistheader">Spell Name</td>
-			<td class="spelllistheader">Mana Cost</td>
-			<td class="spelllistheader">Target Type</td>
-			<td class="spelllistheader">Skill Used</td>
-			<td class="spelllistheader">Classes</td>
-			<td class="spelllistheader">Reagent 1</td>
-			<td class="spelllistheader">Reagent 2</td>
-		</tr>
-		<% @spells.each do |spell| %>
+<% if notice != "" %>
+	<p id="invalid_params">The following errors occurred:<br/> <%= raw(notice) %></p>
+<% else %>
+	<% if @spells.length == 0 %>
+		<h1>Your search produced no results. Please try different search parameters</h1>
+	<% elsif @spells.length == 1
+		#redirect_to detail_search_spells_path(:spell_id => @spells.first.id)
+		#redirect_to :controller => 'search_spells', :action => 'detail', :spell_id => @spells.first.id
+	%>
+	<% else %>
+		<h2>Your search returned the following results (<%= @spells.length %> found):</h2>
+		<br/>
+
+		<table border="1">
 			<tr>
-				<td><%= link_to spell.name, detail_search_spells_path(:spell_id => spell.id) %></td>
-				<td><%= spell.mana_cost %></td>
-				<td><%= spell["target_name"] %></td>
-				<td><%= spell["skill_name"] %></td>
-				<td><%= spell["classes"] %></td>
-				<td><%= spell["reagent1_name"] %></td>
-				<td><%= spell["reagent2_name"] %></td>
+				<td class="spelllistheader">Spell Name</td>
+				<td class="spelllistheader">Mana Cost</td>
+				<td class="spelllistheader">Target Type</td>
+				<td class="spelllistheader">Skill Used</td>
+				<td class="spelllistheader">Classes</td>
+				<td class="spelllistheader">Reagent 1</td>
+				<td class="spelllistheader">Reagent 2</td>
 			</tr>
-		<% end %>
-	</table>
+			<% @spells.each do |spell| %>
+				<tr>
+					<td><%= link_to spell.name, detail_search_spells_path(:spell_id => spell.id) %></td>
+					<td><%= spell.mana_cost %></td>
+					<td><%= spell["target_name"] %></td>
+					<td><%= spell["skill_name"] %></td>
+					<td><%= spell["classes"] %></td>
+					<td><%= spell["reagent1_name"] %></td>
+					<td><%= spell["reagent2_name"] %></td>
+				</tr>
+			<% end %>
+		</table>
+	<% end %>
 <% end %>

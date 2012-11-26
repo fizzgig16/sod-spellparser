@@ -7,25 +7,20 @@
   <%= csrf_meta_tag %>
 </head>
 <body>
-<table border="0">
-	<tr>
-		<td valign="top" width="200px"><img src="sod-logo.png"></td>
-		<td valign="center"><div class="pagetop">Spell Parsing Portal</div></td>
-	</tr>
-	<tr>
-		<td valign="top">
-			<span class="leftnav">
-				<br/><br/>
-				<%= link_to "Search Spells", search_spells_path %><br/>
-				<%= link_to "Upload Spell File", upload_index_path %><br/>
-			</span>
-		</td>
-		<td valign="top">
-			<%= yield %>
-		</td>
-	</tr>
-</table>
+	<div class="header" id="Header">
+		<div class="pagetop"><p>The Official Shards of Dalaya</p>
+		<h1>Spell Parsing Portal</h1></div>
+	</div>
 
-</table>
+	<div class="content" id="content">
+		<input type="button" value="Search Spells" onclick="parent.location='<%= search_spells_path %>'" /><br/>
+		<%= yield %>
+	</div>
+
+
+	<div class="footer" id="footer">		
+		<p>Original spell parser made exclusively for <a href="http://www.shardsofdalaya.com">Shards of Dalaya</a>.</p> 
+	</div>
+	
 </body>
 </html>

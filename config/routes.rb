@@ -1,25 +1,4 @@
 Spellparser::Application.routes.draw do
-  resources :effects
-
-  resources :map_spell_to_char_classes
-
-  resources :char_classes
-
-  resources :reagents
-
-  resources :skill_types
-
-  resources :zone_types
-
-  resources :resist_types
-
-  resources :target_types
-
-  resources :effect_types
-
-  resources :spells
-
-  resources :upload
 
   resources :search_spells do
 	collection do

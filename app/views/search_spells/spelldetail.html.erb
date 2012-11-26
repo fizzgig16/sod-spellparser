@@ -2,6 +2,9 @@
 <h1>Spell Details</h1>
 <br/>
 
+<% if notice != "" %>
+	<p id="invalid_params">The following errors occurred:<br/><%= raw(notice) %></p>
+<% else %>
 <% @spells.each do | spell | %>
 <% @is_self = (spell["target_name"].chomp == "Self" ? true : false) %>
 <table border="1" width="650">
@@ -104,4 +107,5 @@
 		<% end %>
 	</tr>
 </table>
+<% end %>
 <% end %>
