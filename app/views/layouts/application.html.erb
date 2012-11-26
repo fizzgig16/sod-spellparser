@@ -8,13 +8,16 @@
 </head>
 <body>
 	<div class="header" id="Header">
-		<div class="pagetop"><p>The Official Shards of Dalaya</p>
-		<h1>Spell Parsing Portal</h1></div>
+		<div class="pagetop">
+			<p>The Official Shards of Dalaya</p><br/>
+			<h1>Spell Parsing Portal</h1>
+		</div>
 	</div>
 
 	<div class="content" id="content">
 		<input type="button" value="Search Spells" onclick="parent.location='<%= search_spells_path %>'" /><br/>
 		<%= yield %>
+		<div class="push"></div>
 	</div>
 
 
