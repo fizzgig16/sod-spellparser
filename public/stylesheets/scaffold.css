@@ -22,7 +22,7 @@ tbody { background: #333; }
 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	margin: 0 auto -142px; /* the bottom margin is the negative value of the footer's height */
+	margin: 0 auto -30px; /* the bottom margin is the negative value of the footer's height */
 }
 
 .footer, .push {
@@ -41,8 +41,8 @@ tbody { background: #333; }
 }*/
 
 a { color: #fff; }
-a:link {text-decoration:none;}
-a:visited {text-decoration:none; color:#EAEAAE;}
+a:link {text-decoration:underline;}
+a:visited {text-decoration:underline; color:#EAEAAE;}
 a:hover {text-decoration:underline;}
 a:active {text-decoration:underline;}
 

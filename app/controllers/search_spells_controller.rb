@@ -22,7 +22,7 @@ protected
 		errors = ""
 		arrClasses = [ :war, :clr, :pal, :rng, :shd, :dur, :mnk, :brd, :rog, :shm, :nec, :wiz, :mag, :enc, :bst ]
 		arrResists = [ :magic_resist, :cold_resist, :fire_resist, :poison_resist, :disease_resist ]
-		regexAllowed = "^[a-zA-Z0-9'!]*$"
+		regexAllowed = "^[a-zA-Z0-9'! ]*$"
 
         if (params[:minmana] and params[:minmana] != "")
 			errors += "<br/>Min mana must be an integer" if (not valid_int?(params[:minmana]))	
