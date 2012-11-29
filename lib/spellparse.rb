@@ -404,6 +404,32 @@ class ParseSpellsTxt
 				# This means that aego will NOT stack with spells that have an effect modifying Total HP if their max is the same (2)
 				# Clear as mud?
 				return "Forced Spell Stacking: will not stack with other spells affecting " + extra_spell_name
+			when 124
+				# This one can do a lot of different things depending on max value
+				case max
+					when -5
+						return GetEffectPercentDescriptorSingle("Disease Elemental DD and DoT Damage", base1)
+					when -4
+						return GetEffectPercentDescriptorSingle("Poison Elemental DD and DoT Damage", base1)
+					when -3
+						return GetEffectPercentDescriptorSingle("Cold Elemental DD and DoT Damage", base1)
+					when -2
+						return GetEffectPercentDescriptorSingle("Fire Elemental DD and DoT Damage", base1)
+					when -1
+						return GetEffectPercentDescriptorSingle("Magic Elemental DD and DoT Damage", base1)
+					when 0
+						return GetEffectPercentDescriptorSingle("DD Damage", base1)
+					when 1
+						return GetEffectPercentDescriptorSingle("DD and DoT Crit Rate", base1)
+					when 2
+						return GetEffectPercentDescriptorSingle("Bane DD and DoT Damage", base1)
+					when 3
+						return GetEffectPercentDescriptorSingle("DoT Damage", base1)
+					when 10
+						return GetEffectPercentDescriptorSingle("Slow Percentage", base1)
+					else
+						return "Unknown Effect Boost: " + max.to_s 
+				end
 			when 125
 				return GetEffectPercentDescriptorSingle("Chance of Critical Heals", base1)
 			when 127
@@ -412,10 +438,37 @@ class ParseSpellsTxt
 				return GetEffectPercentDescriptorSingle("Mana Cost", -value)
 			when 139
 				return "Excludes spell: " + (use_html ? ("<a href='/search_spells/detail?spell_id=" + base1.to_s + "'>" + extra_spell_name + "</a>") : extra_spell_name)
+			when 144
+				effect_name = use_html ? ("<a href='/search_spells/detail?spell_id=" + base1.to_s + "'>" + extra_spell_name + "</a>") : extra_spell_name
+				return "Damage Shield: Causes " + effect_name + " when hit"
+			when 145
+				return "Fly Mode"
+			when 147
+				return GetEffectPercentDescriptorSingle("Current HP", base1)
+			when 151
+				case base1
+					when 1
+						return "Melee Automatically Critical Hits"
+					when 2
+						return "Reduce Spell Damage Coming from Target by 15%"
+					when 3
+						return "Spells Automatically Critical Hit"
+					when 4
+						return "Melee Automatically Critical Hits (constructs only)"
+					else
+						return "Unknown curse: " + base1.to_s
+				end
+			when 152
+				return "Swarm Pet"
 			when 153
 				# Autocast
 				effect_name = use_html ? ("<a href='/search_spells/detail?spell_id=" + base1.to_s + "'>" + extra_spell_name + "</a>") : extra_spell_name
 				return "Auto cast: " + effect_name 
+			when 154
+				effect_name = use_html ? ("<a href='/search_spells/detail?spell_id=" + base1.to_s + "'>" + extra_spell_name + "</a>") : extra_spell_name
+				return "Dispell Effect: " + effect_name
+			when 199
+				return GetEffectPercentDescriptorSingle("Hate Transfer", base1)
 			else
 				return "Unknown effect: " + effect.to_s
 		end

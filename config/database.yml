@@ -26,7 +26,11 @@ test:
   timeout: 5000
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  pool: 5
-  timeout: 5000
+  adapter: mysql2
+  encoding: utf8
+  database: sod_spells
+  username: root
+  password: foo123
+  #socket: /tmp/mysql.sock
+  host: 127.0.0.1
+  port: 3306

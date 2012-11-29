@@ -9,6 +9,10 @@ Spellparser::Application.routes.draw do
 
   root :to => 'search_spells#index'
 
+  unless Rails.application.config.consider_all_requests_local
+    match '*not_found', to: 'errors#error_404'
+  end
+
   #match 'search_spells/spelldetail' => 'search_spells#spelldetail', :as => 'spelldetail'
   #match 'search_spells/foo' => 'search_spells#foo', :as => 'foo'
  

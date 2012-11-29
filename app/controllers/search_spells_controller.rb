@@ -156,8 +156,8 @@ public
 				illusion = Illusion.select("name").where("model1=" + e.base1.to_s + " and model2=" + e.max.to_s)
 				extra = ""
 				extra = (illusion.first != nil) ? illusion.first.name : "" 
-			elsif (e.formula == 100 or e.effect == 139 or e.effect == 153)
-				# Try to get a spell name in the case of formulas with a value 100, as well as effect ID 153. This happens for procs
+			elsif (e.formula == 100 or e.effect == 139 or e.effect == 144 or e.effect == 153 or e.effect == 154)
+				# Try to get a spell name in the case of formulas with a value 100, as well as effect ID 153. This happens for procs as well as other "linked" spells and effects
 				spelltemp = Spell.select("name").where("spells.id = " + e.base1.to_s)
 				if (spelltemp.first != nil)
 					extra_spell = spelltemp.first.name
