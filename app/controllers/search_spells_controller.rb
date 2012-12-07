@@ -176,7 +176,7 @@ public
 			# Don't need to do for detrimental spells
 			if (beneficial)
 				unless (e.base1 == 0 or e.effect == 32)		# 32 is summoned - no silly stacks there!
-					stacked_effects = Effect.select("DISTINCT *").joins("INNER JOIN spells ON effects.spell_id = spells.id").where("beneficial = 1 and base1 != 0 and effect = " + e.effect.to_s + " and slot = " + e.slot.to_s).order("spells.name")
+					stacked_effects = Effect.select("DISTINCT *").joins("INNER JOIN spells ON effects.spell_id = spells.id").where("beneficial = 1 and duration > 0 and base1 != 0 and effect = " + e.effect.to_s + " and slot = " + e.slot.to_s).order("spells.name")
 	    	        stacked_effects.each do |stacked_spell|
 	        	        # Get the name
 	            	    unless hashStackedSpells.has_key?(stacked_spell.spell_id)
