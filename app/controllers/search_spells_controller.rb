@@ -174,7 +174,7 @@ public
 			# Get stacking conflicts not already captured - this is done by looking for beneficial spells with the same effect and slot
 			# Note that base1=0 is just legacy stuff, and should be ignored
 			# Don't need to do for detrimental spells
-			if (beneficial)
+			if (beneficial and duration > 0)
 				unless (e.base1 == 0 or e.effect == 32)		# 32 is summoned - no silly stacks there!
 					stacked_effects = Effect.select("DISTINCT *").joins("INNER JOIN spells ON effects.spell_id = spells.id").where("beneficial = 1 and duration > 0 and base1 != 0 and effect = " + e.effect.to_s + " and slot = " + e.slot.to_s).order("spells.name")
 	    	        stacked_effects.each do |stacked_spell|
