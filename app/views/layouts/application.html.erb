@@ -7,23 +7,34 @@
   <%= csrf_meta_tag %>
 </head>
 <body>
-	<div class="header" id="Header">
-		<div class="pagetop">
-			<p>The Official Shards of Dalaya</p><br/>
-			<h1>Spell Parsing Portal</h1>
-		</div>
-	</div>
-
-	<div class="content" id="content">
-		<input type="button" value="Search Spells" onclick="parent.location='<%= search_spells_path %>'" /><br/>
-		<%= yield %>
-		<div class="push"></div>
-	</div>
-
-
-	<div class="footer" id="footer">		
-		<p>Original spell parser made exclusively for <a href="http://www.shardsofdalaya.com">Shards of Dalaya</a>.</p> 
-	</div>
-	
+	<table width="border="0" align="center" cellpadding="0" cellspacing="0">
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<table border="0" cellpadding="0" cellspacing="0" width="900px">
+					<tr>
+						<td colspan="3"><img src="/images/header_paper1000.jpg"/></td>
+					</tr>
+					<tr>
+						<td class="backleft" width="27px">&nbsp;</td>
+						<td align=left background="/images/paper_back_faded.jpg">
+							<div align="center"><img src="/images/pagehead_spellparser.jpg" /></div><br/>
+							<%= yield %>
+							<br/>
+							<div align="right"><input type="button" value="New Search" onclick="parent.location='<%= search_spells_path %>'" /></div>
+							<div align="center"><a href="/">Shards of Dalaya Home Page</a></div>
+						</td>
+						<td class="backright" width="27px">&nbsp;</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<img src="/images/footer-paper1000.jpg"/>
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>	
 </body>
 </html>

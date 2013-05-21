@@ -4,18 +4,35 @@ html {
 
 body { 
 	height: 100%;
-	background-image:url('sod-bkgnd.png');
-	color:#FFF;
+	/*background-image:url('/images/paper_back_faded.jpg');*/
+	background-color: #000000;
+	color:#4f4524;
 }
 
-table { margin: 1em; border-collapse: collapse; border: 1px #111 solid;}
+.backleft {
+	background-image: url('/images/paperedge_left1.jpg');
+	background-position: right top;
+}
+.backright {
+	background-image: url('/images/paperedge_right1.jpg');
+	background-position: left top;
+}
+
+/*table { margin: 1em; border-collapse: collapse; border: 1px #111 solid;}
 td, th { padding: .3em;  }
-tbody { background: #333; }
+tbody { background: #333; }*/
+
+#pageheadtable {
+	margin: 0;
+	border: 0;
+	width: 1000px;
+}
 
 #content { 
-	background-color: #222; 
-	color:#FFF;
-	border: solid 2px #151c2b;
+	/*background-color: #222;*/ 
+	background-image:url('/images/paper_back_faded.jpg');
+	color:#000;
+	/*border: solid 2px #151c2b;*/
 }
 
 .wrapper {
@@ -41,13 +58,13 @@ tbody { background: #333; }
 }*/
 
 a { color: #fff; }
-a:link {text-decoration:underline;}
-a:visited {text-decoration:underline; color:#EAEAAE;}
+a:link {text-decoration:underline; color: #4f4524; }
+a:visited {text-decoration:underline; color:#4f4524; }
 a:hover {text-decoration:underline;}
 a:active {text-decoration:underline;}
 
 h1, h2, h3, h4, h5 { 
-	color: #EAEAAE; 
+	color:#603002;
 	font-family:"ClearType", Calibri, sans-serif; 
 	text-decoration:none;
 	margin-top: 20px;
@@ -98,11 +115,14 @@ pre {
 input
 {
 	color: #FFF;
-	background: #4f6799;
+	background: #44370b;
 	border: 3px solid #000;
 }
 
 .pagetop {
+	background-image: url('/images/header_paper.jpg');
+	background-repeat:no-repeat;
+	background-size:cover;
 	font-size: 30px;
 	color: #bbb;
 	font-weight: bold;
