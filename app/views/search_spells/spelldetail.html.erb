@@ -34,7 +34,7 @@
 			<% end %>
 		</td>
 		<td><b>Resist Adj: </b><%= (@is_self or (spell["resist_name"] == nil or spell["resist_name"] == ""))  ? "N/A" : spell.resist_adj %></td>
-		<td>&nbsp;</td>
+		<td><b>Spell ID: </b><%= spell.id %></td>
 	</tr>
 	<tr>
 		<td><b>Range: </b><%= @is_self ? "N/A" : spell.range %></td>
